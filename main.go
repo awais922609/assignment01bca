@@ -5,37 +5,37 @@ import (
 	"fmt"
 )
 
-var lastHash string
+var LastHash string
 
 type Block struct {
-	transaction  string
-	nonce        int
-	previousHash string
-	blockhash    string
+	Transaction  string
+	Nonce        int
+	PreviousHash string
+	Blockhash    string
 }
 
 func (b *Block) CalculateHash(stringToHash string) string {
 
 	sum := sha256.Sum256([]byte(stringToHash))
-	b.blockhash = string(sum[:])
+	b.Blockhash = string(sum[:])
 
-	return b.blockhash
+	return b.Blockhash
 
 }
 
 type BlockList struct {
-	list []*Block
+	List []*Block
 }
 
-func (bc1 *BlockList) NewBlock(transaction string, nonce int, previousHash string) *Block {
+func (bc1 *BlockList) NewBlock(Transaction string, Nonce int, PreviousHash string) *Block {
 
 	block := new(Block)
-	block.transaction = transaction
-	block.nonce = nonce
-	block.previousHash = previousHash
-	block.CalculateHash(transaction + string(nonce) + previousHash)
-	bc1.list = append(bc1.list, block)
-	lastHash = block.blockhash
+	block.Transaction = Transaction
+	block.Nonce = Nonce
+	block.PreviousHash = PreviousHash
+	block.CalculateHash(Transaction + string(Nonce) + PreviousHash)
+	bc1.List = append(bc1.List, block)
+	LastHash = block.Blockhash
 
 	return block
 
@@ -43,26 +43,26 @@ func (bc1 *BlockList) NewBlock(transaction string, nonce int, previousHash strin
 
 func ChangeBlock(b1 *Block) {
 
-	b1.transaction = "Elon Musk to Awais"
-	b1.CalculateHash(b1.transaction + string(b1.nonce) + b1.previousHash)
+	b1.Transaction = "Elon Musk to Awais"
+	b1.CalculateHash(b1.Transaction + string(b1.Nonce) + b1.PreviousHash)
 
 }
 
-func VerifyChain(ls *BlockList, lastHash string) {
+func VerifyChain(ls *BlockList, LastHash string) {
 
-	for i := 0; i < len(ls.list); i++ {
+	for i := 0; i < len(ls.List); i++ {
 
 		if i == 0 {
-			ls.list[i].CalculateHash(ls.list[i].transaction + string(ls.list[i].nonce) + "0")
+			ls.List[i].CalculateHash(ls.List[i].Transaction + string(ls.List[i].Nonce) + "0")
 
 		} else {
 
-			ls.list[i].CalculateHash(ls.list[i].transaction + string(ls.list[i].nonce) + ls.list[i-1].blockhash)
+			ls.List[i].CalculateHash(ls.List[i].Transaction + string(ls.List[i].Nonce) + ls.List[i-1].Blockhash)
 
 		}
 	}
 
-	if ls.list[len(ls.list)-1].blockhash == lastHash {
+	if ls.List[len(ls.List)-1].Blockhash == LastHash {
 
 		fmt.Println("\n\n\t\tChain has been Verified")
 
@@ -73,15 +73,15 @@ func VerifyChain(ls *BlockList, lastHash string) {
 }
 func (ls *BlockList) Print() {
 
-	for i := range ls.list {
+	for i := range ls.List {
 
-		fmt.Printf("\nTransaction is == %s", ls.list[i].transaction)
+		fmt.Printf("\nTransaction is == %s", ls.List[i].Transaction)
 
-		fmt.Printf("\nnonce is == %d", ls.list[i].nonce)
+		fmt.Printf("\nNonce is == %d", ls.List[i].Nonce)
 
-		fmt.Printf("\nPrevious hash is == %x", ls.list[i].previousHash)
+		fmt.Printf("\nPrevious hash is == %x", ls.List[i].PreviousHash)
 
-		fmt.Printf("\nBlock hash is == %x", ls.list[i].blockhash)
+		fmt.Printf("\nBlock hash is == %x", ls.List[i].Blockhash)
 
 	}
 }
